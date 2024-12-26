@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Information Api</title>
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/noticia.css">
+    <link rel="stylesheet" href="/css/app.css">
+    
+</head>
+<body>
+    <header class="header">
+        <h1 class="header__titulo">Blog Information</h1>
+    </header>
+    <nav class="nav">
+        <ul>
+            <li><a href="#" id="index" class="nav__btn">Noticias</a></li>
+            <li><a href="#" id="publist" class="nav__btn">Publicar</a></li>
+            <li><a href="#" id="cerrarsesion" class="nav__btn">Cerrar Sesion</a></li>
+        </ul>        
+    </nav>    
+        <form class="form">
+            <div class="form__campo">
+                <label for="Titulo">Titulo: </label>
+                <input id="titulo" type="text" required>
+            </div>
+            <div class="form__campo">
+                <label for="Autor">Autor: </label>
+                <input id="autor" type="text" required>
+            </div>
+            <div class="form__campo">
+                <label for="Fecha">Fecha: </label>
+                <input id="fecha" type="date" required>
+            </div>
+            <div class="form__campo--texttarea">
+                <label for="Noticia">Noticia: </label>
+                <textarea id="noticia" cols="20" rows="10"></textarea>
+            </div>
+            <div class="form__campo">
+                <label for="images">imagen: </label>
+                <input id="images" type="file" required>
+            </div>
+            
+           
+            <div class="form__campo">
+                <label id="enviar" class="btn">Enviar</label>
+            </div> 
+        </form>     
+  
+    <footer class="footer">
+        <p>Todos los derechos reservados.</p>
+    </footer>
+    <script type="module" src="/js/publist.js"></script> 
+</body>
+</html>

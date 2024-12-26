@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Information Api</title>
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+    <header class="header">
+        <h1 class="header__titulo">Blog Information</h1>
+    </header>
+    <div class="contenedor">
+    <Main class="main">
+        <h2 class="informacion">¿Qué es un sitio de noticas?</h2>
+        <p>Un sitio de noticias es un portal en línea que publica artículos, eventos y otra información relevante sobre la actualidad.
+             Los sitios de noticias pueden cubrir temas generales, como política, deportes, entretenimiento o tecnología, o enfocarse en un tema específico.</p>
+    </Main>
+
+    <form action="" id="_form" class="form">
+        <div class="form__campo">
+            <label for="email" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">Email: </label>
+            <input id="email" type="email" required>
+        </div>
+        
+        <div class="form__campo">
+            <label for="password">Password:</label>
+            <input id="password" type="password" required>
+        </div>
+        <div class="form__campo">
+            <label for="" class="btn login">Iniciar Sesión</label>
+            <label for="" class="btn register">Registrarse</label>
+        </div>       
+
+    </form>
+    </div>
+    <footer class="footer">
+        <p>Todos los derechos reservados.</p>
+    </footer>
+    <script type="module" src="/js/auth.js"></script> 
+</body>
+</html>

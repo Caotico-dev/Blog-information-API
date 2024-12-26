@@ -1,0 +1,77 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\User\\OneDrive\\Escritorio\\Programacion\\Proyecto AA\\Blog informetion API\\Blog informetion API\\wwwroot\\css\\app.css",
+      "PackagePath": "staticwebassets\\css\\app.css"
+    },
+    {
+      "Id": "C:\\Users\\User\\OneDrive\\Escritorio\\Programacion\\Proyecto AA\\Blog informetion API\\Blog informetion API\\wwwroot\\css\\normalize.css",
+      "PackagePath": "staticwebassets\\css\\normalize.css"
+    },
+    {
+      "Id": "C:\\Users\\User\\OneDrive\\Escritorio\\Programacion\\Proyecto AA\\Blog informetion API\\Blog informetion API\\wwwroot\\css\\noticia.css",
+      "PackagePath": "staticwebassets\\css\\noticia.css"
+    },
+    {
+      "Id": "C:\\Users\\User\\OneDrive\\Escritorio\\Programacion\\Proyecto AA\\Blog informetion API\\Blog informetion API\\wwwroot\\images\\bugatti-chiron_sport-2019-1600-01.jpg",
+      "PackagePath": "staticwebassets\\images\\bugatti-chiron_sport-2019-1600-01.jpg"
+    },
+    {
+      "Id": "C:\\Users\\User\\OneDrive\\Escritorio\\Programacion\\Proyecto AA\\Blog informetion API\\Blog informetion API\\wwwroot\\images\\imagen_1.jpg",
+      "PackagePath": "staticwebassets\\images\\imagen_1.jpg"
+    },
+    {
+      "Id": "C:\\Users\\User\\OneDrive\\Escritorio\\Programacion\\Proyecto AA\\Blog informetion API\\Blog informetion API\\wwwroot\\index.html",
+      "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "C:\\Users\\User\\OneDrive\\Escritorio\\Programacion\\Proyecto AA\\Blog informetion API\\Blog informetion API\\wwwroot\\js\\auth.js",
+      "PackagePath": "staticwebassets\\js\\auth.js"
+    },
+    {
+      "Id": "C:\\Users\\User\\OneDrive\\Escritorio\\Programacion\\Proyecto AA\\Blog informetion API\\Blog informetion API\\wwwroot\\js\\getnews.js",
+      "PackagePath": "staticwebassets\\js\\getnews.js"
+    },
+    {
+      "Id": "C:\\Users\\User\\OneDrive\\Escritorio\\Programacion\\Proyecto AA\\Blog informetion API\\Blog informetion API\\wwwroot\\js\\publist.js",
+      "PackagePath": "staticwebassets\\js\\publist.js"
+    },
+    {
+      "Id": "C:\\Users\\User\\OneDrive\\Escritorio\\Programacion\\Proyecto AA\\Blog informetion API\\Blog informetion API\\wwwroot\\js\\register.js",
+      "PackagePath": "staticwebassets\\js\\register.js"
+    },
+    {
+      "Id": "C:\\Users\\User\\OneDrive\\Escritorio\\Programacion\\Proyecto AA\\Blog informetion API\\Blog informetion API\\wwwroot\\login.html",
+      "PackagePath": "staticwebassets\\login.html"
+    },
+    {
+      "Id": "C:\\Users\\User\\OneDrive\\Escritorio\\Programacion\\Proyecto AA\\Blog informetion API\\Blog informetion API\\wwwroot\\publist.html",
+      "PackagePath": "staticwebassets\\publist.html"
+    },
+    {
+      "Id": "C:\\Users\\User\\OneDrive\\Escritorio\\Programacion\\Proyecto AA\\Blog informetion API\\Blog informetion API\\wwwroot\\register.html",
+      "PackagePath": "staticwebassets\\register.html"
+    },
+    {
+      "Id": "C:\\Users\\User\\OneDrive\\Escritorio\\Programacion\\Proyecto AA\\Blog informetion API\\Blog informetion API\\wwwroot\\utilities\\utilities.js",
+      "PackagePath": "staticwebassets\\utilities\\utilities.js"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Blog informetion API.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.Blog informetion API.props",
+      "PackagePath": "build\\Blog informetion API.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.Blog informetion API.props",
+      "PackagePath": "buildMultiTargeting\\Blog informetion API.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.Blog informetion API.props",
+      "PackagePath": "buildTransitive\\Blog informetion API.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
