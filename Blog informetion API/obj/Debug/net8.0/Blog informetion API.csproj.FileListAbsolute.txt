@@ -208,3 +208,4 @@ C:\Users\User\OneDrive\Escritorio\Programacion\Proyecto AA\Blog informetion API\
 C:\Users\User\OneDrive\Escritorio\Programacion\Proyecto AA\Blog informetion API\Blog informetion API\bin\Debug\net8.0\Snappier.dll
 C:\Users\User\OneDrive\Escritorio\Programacion\Proyecto AA\Blog informetion API\Blog informetion API\bin\Debug\net8.0\ZstdSharp.dll
 C:\Users\User\OneDrive\Escritorio\Programacion\Proyecto AA\Blog informetion API\Blog informetion API\bin\Debug\net8.0\Blog informetion API.staticwebassets.runtime.json
+C:\Users\User\OneDrive\Escritorio\Programacion\Proyecto AA\Blog informetion API\Blog informetion API\obj\Debug\net8.0\Blog informetion API.sourcelink.json
