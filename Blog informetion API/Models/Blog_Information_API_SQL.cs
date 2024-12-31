@@ -12,7 +12,9 @@ namespace Blog_informetion_API.Models
         /// </summary>
         /// <returns>List news.</returns>
         Task<List<NewsDto>> GetNewsAsync();
-        
+
+        Task<List<NewsDto>> GetNewsDateAsync(DateOnly dateOnly);
+
         /// <summary>
         /// Save a news
         /// </summary>
@@ -212,6 +214,39 @@ namespace Blog_informetion_API.Models
             }
        
 
+        }
+
+        public async Task<List<NewsDto>> GetNewsDateAsync(DateOnly dateOnly)
+        {
+            var newscontent = new List<NewsDto>();
+            var today = dateOnly;
+            try
+            {
+                var newsList = await this._Db.News.Where(f => f.FechaDePublicacion == today).ToListAsync();
+
+
+                foreach (var item in newsList)
+                {
+                    var News = new NewsDto()
+                    {
+                        Titulo = item.Titulo,
+                        Autor = item.Autor,
+                        FechaDePublicacion = item.FechaDePublicacion,
+                        Cuerpo = Regex.Replace(item.Cuerpo!, @"\.\s+", ".\n"),
+                        Url_images = $"https://localhost:7186/information/news_images={Uri.EscapeDataString(item.Titulo!)}"
+                    };
+
+                    newscontent.Add(News);
+
+                }
+
+                return newscontent;
+            }
+            catch (Exception ex)
+            {
+                this._Logger.LogError(ex, "Error al obtener noticia");
+                return newscontent = null;
+            }
         }
     }
 }

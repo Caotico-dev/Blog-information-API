@@ -94,6 +94,32 @@
   },
   {
     "ContainingType": "Blog_informetion_API.Controller.InformationReceiverController",
+    "Method": "GetNews",
+    "RelativePath": "information/newsdate",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dateOnly",
+        "Type": "System.DateOnly",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[Blog_informetion_API.Models.NewsDto, Blog informetion API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Blog_informetion_API.Controller.InformationReceiverController",
     "Method": "RegisterPublicist",
     "RelativePath": "information/publicist",
     "HttpMethod": "POST",

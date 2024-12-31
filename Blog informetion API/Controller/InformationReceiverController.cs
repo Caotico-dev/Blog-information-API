@@ -140,6 +140,25 @@ namespace Blog_informetion_API.Controller
             
 
         }
+        [Authorize]
+        [HttpGet("/information/newsdate")]
+        public async Task<List<NewsDto>> GetNews(DateOnly dateOnly)
+        {
+            try
+            {
+                var news = await this._Information_SQL.GetNewsDateAsync(dateOnly);
+
+                return news;
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Error al obtener la noticia");
+                return new List<NewsDto>();
+
+            }
+
+
+        }
 
         //[Authorize]
         [HttpGet("/information/news_images={tituloNoticia}")]
