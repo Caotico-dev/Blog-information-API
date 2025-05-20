@@ -43,12 +43,9 @@ async function registerData(email,password,password_confirmacion){
         body: JSON.stringify(data)
     }
       try {
-            const response = await fetch(uri, solicitud);  
+            const response = await fetch(uri, solicitud);
                    
-            if (!response.ok) {
-                aviso("Ocurrio un error intentelo mas tarde","Error");
-                return            
-            }
+            
             switch(response.status){
                 case 200:
                     aviso(result["message"],"Exito"); 
