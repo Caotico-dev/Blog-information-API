@@ -10,7 +10,7 @@ namespace Blog_informetion_API.DirectoryController
         /// <param name="titulo"></param>
         /// <param name="imagen"></param>
         /// <returns>path file.</returns>
-        Task<string> SaveImages(string titulo, IFormFile imagen);  
+        Task<string> SaveImages(string titulo, IFormFile imagen);
         /// <summary>
         /// gets file images in the path spacified.
         /// </summary>
@@ -28,7 +28,7 @@ namespace Blog_informetion_API.DirectoryController
         /// </summary>
         /// <param name="path"></param>
         /// <returns>returns true if deleted otherwise false.</returns>
-        Task<bool> DeleteImages(string path);     
+        Task<bool> DeleteImages(string path);
 
 
     }
@@ -37,19 +37,16 @@ namespace Blog_informetion_API.DirectoryController
         /// <summary>
         /// Default path
         /// </summary>
-        private const string path = "..\\Blog informetion API\\SupDirectory\\DirectoryLow\\";       
+        private const string path = "..\\Blog informetion API\\SupDirectory\\DirectoryLow\\";
         
-        private readonly ILogger<DirectoryInformation> Logger;
-        public DirectoryInformation(ILogger<DirectoryInformation> logger)
-        {
-            this.Logger = logger;
-        }       
+        public DirectoryInformation(){          
+        }
         /// <summary>
         /// create a directory if it does not exist
         /// </summary>
         private void CreateDirectory()
         {
-            if(!Directory.Exists(path))
+            if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
@@ -60,10 +57,10 @@ namespace Blog_informetion_API.DirectoryController
         /// <param name="path"></param>
         /// <returns>Int</returns>
         private int NumberDirectoy(string path)
-        {           
+        {
             int number = 0;
-            var numberDirectory = Directory.GetDirectories(path).Length;            
-            return number = numberDirectory + 1; 
+            var numberDirectory = Directory.GetDirectories(path).Length;
+            return number = numberDirectory + 1;
         }
 
         /// <summary>
@@ -75,12 +72,12 @@ namespace Blog_informetion_API.DirectoryController
         {
             if (Directory.Exists(path))
             {
-                await Task.Run(() =>  Directory.Delete(path,recursive: true));               
+                await Task.Run(() => Directory.Delete(path, recursive: true));
 
                 return true;
             }
-            return false;         
-        }       
+            return false;
+        }
         /// <summary>
         /// get the image in a byte string if the image not exist return empty byte
         /// </summary>
@@ -89,39 +86,28 @@ namespace Blog_informetion_API.DirectoryController
         public async Task<byte[]> GetFileImages(string path)
         {
             byte[] image = null;
-            try
-            {              
 
-                if (Directory.Exists(path))
+            if (Directory.Exists(path))
+            {
+                var files = await Task.Run(() => Directory.GetFiles(path));
+
+                var img = files.FirstOrDefault(f => Path.GetExtension(f).Equals(".jpeg", StringComparison.OrdinalIgnoreCase) ||
+                                                Path.GetExtension(f).Equals(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                                                Path.GetExtension(f).Equals(".png", StringComparison.OrdinalIgnoreCase));
+
+
+                if (img != null)
                 {
-                    var files = await Task.Run(() => Directory.GetFiles(path));
-
-                    var img = files.FirstOrDefault(f => Path.GetExtension(f).Equals(".jpeg", StringComparison.OrdinalIgnoreCase) ||
-                                                    Path.GetExtension(f).Equals(".jpg", StringComparison.OrdinalIgnoreCase) ||
-                                                    Path.GetExtension(f).Equals(".png", StringComparison.OrdinalIgnoreCase));
-
-
-                    if (img != null)
+                    await using (FileStream strem = new FileStream(img, FileMode.Open, FileAccess.Read, FileShare.Read, 4097, true))
                     {
-                        await using (FileStream strem = new FileStream(img, FileMode.Open, FileAccess.Read, FileShare.Read, 4097, true))
-                        {
-                            byte[] byteimg = new byte[strem.Length];
-                            await strem.ReadAsync(byteimg, 0, (int)strem.Length);
-                            return byteimg;
-                        }
+                        byte[] byteimg = new byte[strem.Length];
+                        await strem.ReadAsync(byteimg, 0, (int)strem.Length);
+                        return byteimg;
                     }
                 }
-                return image;
+            }
+            return image;
 
-            }
-            catch (Exception ex)
-            {
-                this.Logger.LogError(ex, "Error al obtener imagen");
-                return image;
-                
-            }
-                             
-            
         }
         /// <summary>
         /// Gets extension in a path spacified.
@@ -130,78 +116,61 @@ namespace Blog_informetion_API.DirectoryController
         /// <returns>A file extension.</returns>
         public async Task<string> GetExtension(string path)
         {
-            try
+
+            if (Directory.Exists(path))
             {
-                if (Directory.Exists(path))
+                var files = await Task.Run(() => Directory.GetFiles(path));
+                var img = files.FirstOrDefault(f => Path.GetExtension(f).Equals(".jpeg", StringComparison.OrdinalIgnoreCase) ||
+                                                Path.GetExtension(f).Equals(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                                                Path.GetExtension(f).Equals(".png", StringComparison.OrdinalIgnoreCase));
+
+                var imgext = Path.GetExtension(img);
+
+
+                if (imgext != null)
                 {
-                    var files = await Task.Run(() => Directory.GetFiles(path));
-                    var img = files.FirstOrDefault(f => Path.GetExtension(f).Equals(".jpeg", StringComparison.OrdinalIgnoreCase) ||
-                                                    Path.GetExtension(f).Equals(".jpg", StringComparison.OrdinalIgnoreCase) ||
-                                                    Path.GetExtension(f).Equals(".png", StringComparison.OrdinalIgnoreCase));
-
-                    var imgext = Path.GetExtension(img);
-
-
-                    if (imgext != null)
-                    {
-                        return imgext.TrimStart('.');
-                    }
-                    return "";
-
+                    return imgext.TrimStart('.');
                 }
                 return "";
-            }
-            catch (Exception ex)
-            {
-                this.Logger.LogError(ex, "Error al obtener extension");
-                return "";
-            }
-            
 
-        }     
-     
+            }
+            return "";
+
+        }
+
         /// <summary>
         /// save to directory if saved successfully returns true otherwise false.
         /// </summary>       
         /// <param name="imagen"></param>
         /// <returns>string</returns>
-        public async Task<string> SaveImages(string titulo,IFormFile imagen)
-        {          
+        public async Task<string> SaveImages(string titulo, IFormFile imagen)
+        {
 
-            try
+            CreateDirectory();
+
+            if (!string.IsNullOrWhiteSpace(titulo) && imagen.Length != 0)
             {
-                CreateDirectory();
+                var numberDirectory = NumberDirectoy(path);
+                string file = Path.Combine(path, numberDirectory + ".-" + titulo);
+                Directory.CreateDirectory(file);
 
-                if (!string.IsNullOrWhiteSpace(titulo) && imagen.Length != 0)
+
+                var fileimg = Path.Combine(file, imagen.FileName);
+                using (var stream = new FileStream(fileimg, FileMode.Create))
                 {
-                    var numberDirectory = NumberDirectoy(path);                    
-                    string file = Path.Combine(path, numberDirectory + ".-" + titulo);
-                    Directory.CreateDirectory(file);
+                    await imagen.CopyToAsync(stream);
+                }
 
-
-                    var fileimg = Path.Combine(file, imagen.FileName);
-                    using (var stream = new FileStream(fileimg, FileMode.Create))
-                    {
-                        await imagen.CopyToAsync(stream);
-                    }
-
-                    if (Directory.Exists(file))
-                    {
-                        return file;
-                    }
-                    return "";
-
+                if (Directory.Exists(file))
+                {
+                    return file;
                 }
                 return "";
+
             }
-            catch (Exception ex)
-            {
-                this.Logger.LogError(ex, "Error al guardar la imagen");                
-                return "";
-            }
-                      
+            return "";
 
         }
-     
+
     }
 }

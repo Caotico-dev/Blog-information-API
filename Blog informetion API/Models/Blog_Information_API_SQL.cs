@@ -1,6 +1,5 @@
 ﻿using Blog_informetion_API.DirectoryController;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 
 namespace Blog_informetion_API.Models
@@ -34,25 +33,17 @@ namespace Blog_informetion_API.Models
         /// <param name="titulo"></param>
         /// <returns>byte[] imageData, string extension.</returns>
         Task<(byte[] imageData, string extension)> GetImageData(string titulo);
-
-
-
     }
 
     public class Blog_Information_API_SQL : IBlog_information_SQL
     {
-        private readonly BlogInformationApiContext _Db;   
+        private readonly BlogInformationApiContext _Db;
         IDirectoryController _DirectoryController;
-        ILogger<Blog_Information_API_SQL> _Logger;
 
-        public Blog_Information_API_SQL(BlogInformationApiContext db,IDirectoryController directoryController
-            ,ILogger<Blog_Information_API_SQL> logger)
+        public Blog_Information_API_SQL(BlogInformationApiContext db, IDirectoryController directoryController)
         {
             this._Db = db;
             this._DirectoryController = directoryController;
-            this._Logger = logger;
-           
-          
         }
         /// <summary>
         /// Delete a news item 
@@ -61,30 +52,23 @@ namespace Blog_informetion_API.Models
         /// <returns>bool</returns>
         public async Task<bool> DeleteNewsAsync(string titulo, DateOnly dateOnly)
         {
-            try
-            {
-                var News = await this._Db.News.FirstOrDefaultAsync(f => f.Titulo!.ToLower().Trim() == titulo.ToLower().Trim() && f.FechaDePublicacion == dateOnly);
 
-                if (News != null)
+            var News = await this._Db.News.FirstOrDefaultAsync(f => f.Titulo!.ToLower().Trim() == titulo.ToLower().Trim() && f.FechaDePublicacion == dateOnly);
+
+            if (News != null)
+            {
+                bool deletedirectory = await this._DirectoryController.DeleteImages(News.Url_images!);
+                if (deletedirectory)
                 {
-                    bool deletedirectory = await this._DirectoryController.DeleteImages(News.Url_images!);
-                    if (deletedirectory)
-                    {
-                        this._Db.News.Remove(News);
+                    this._Db.News.Remove(News);
 
-                        await _Db.SaveChangesAsync();
-                        return true;
-                    }
+                    await _Db.SaveChangesAsync();
+                    return true;
                 }
+            }
 
-                return false;
-            }
-            catch (Exception ex)
-            {
-                this._Logger.LogError(ex, "Error al eliminar una noticia");
-                return false;
-            }
-            
+            return false;
+
         }
         /// <summary>
         /// Get new news
@@ -92,37 +76,31 @@ namespace Blog_informetion_API.Models
         /// <returns>List<NewsDto></News></returns>
         public async Task<List<NewsDto>> GetNewsAsync()
         {
-           
+
             var newscontent = new List<NewsDto>();
             var today = DateOnly.FromDateTime(DateTime.Today);
-            try
+
+            var newsList = await this._Db.News.Where(f => f.FechaDePublicacion == today).ToListAsync();
+
+
+            foreach (var item in newsList)
             {
-                var newsList = await this._Db.News.Where(f => f.FechaDePublicacion == today).ToListAsync();
-
-
-                foreach (var item in newsList)
+                var News = new NewsDto()
                 {
-                    var News = new NewsDto()
-                    {
-                        Titulo = item.Titulo,
-                        Autor = item.Autor,
-                        FechaDePublicacion = item.FechaDePublicacion,
-                        Cuerpo = Regex.Replace(item.Cuerpo!, @"\.\s+", ".\n"), 
-                        Url_images = $"https://localhost:7186/information/news_images={Uri.EscapeDataString(item.Titulo!)}"
-                    };
+                    Titulo = item.Titulo,
+                    Autor = item.Autor,
+                    FechaDePublicacion = item.FechaDePublicacion,
+                    Cuerpo = Regex.Replace(item.Cuerpo!, @"\.\s+", ".\n"),
+                    Url_images = $"https://localhost:7186/information/news_images={Uri.EscapeDataString(item.Titulo!)}"
+                };
 
-                    newscontent.Add(News);
+                newscontent.Add(News);
 
-                }
-
-                return newscontent;
             }
-            catch (Exception ex)
-            {
-                this._Logger.LogError(ex, "Error al obtener noticia");
-                return newscontent = null;    
-            }
-            
+
+            return newscontent;
+
+
         }
         /// <summary>
         /// Gets images in bytes and their extension.
@@ -131,37 +109,28 @@ namespace Blog_informetion_API.Models
         /// <returns>byte[] imageData, string extension</returns>
         public async Task<(byte[] imageData, string extension)> GetImageData(string titulo)
         {
-            try
+            if (!string.IsNullOrEmpty(titulo))
             {
-                if (!string.IsNullOrEmpty(titulo))
+
+                var images = this._Db.News.FirstOrDefault(t => t.Titulo!.ToLower().Trim() == titulo.ToLower().Trim())?.Url_images;
+
+                if (!string.IsNullOrEmpty(images))
                 {
 
-                    var images = this._Db.News.FirstOrDefault(t => t.Titulo!.ToLower().Trim() == titulo.ToLower().Trim())?.Url_images;
+                    var imageData = await this._DirectoryController.GetFileImages(images);
+                    var ext = await this._DirectoryController.GetExtension(images);
 
-                    if (!string.IsNullOrEmpty(images))
+                    if (imageData != null && !string.IsNullOrEmpty(ext))
                     {
-
-                        var imageData = await this._DirectoryController.GetFileImages(images);
-                        var ext = await this._DirectoryController.GetExtension(images);
-
-                        if (imageData != null && !string.IsNullOrEmpty(ext))
-                        {
-                            return (imageData, ext);
-                        }
+                        return (imageData, ext);
                     }
                 }
-
-
-                return (Array.Empty<byte>(), string.Empty);
             }
-            catch (Exception ex)
-            {
-                this._Logger.LogError(ex, "Error al obtener imagenes");
-                return (Array.Empty<byte>(), string.Empty);
-            }
+
+            return (Array.Empty<byte>(), string.Empty);
 
         }
-        
+
         /// <summary>
         /// Save a news
         /// </summary>
@@ -170,49 +139,37 @@ namespace Blog_informetion_API.Models
         /// <returns>Return true if the news was saved correctly, otherwise false</returns>
         public async Task<bool> SaveNewsAsync(PublishNews newsDto, IFormFile images)
         {
-            try
+
+            if (newsDto != null)
             {
-                if (newsDto != null)
+                var news = new News
                 {
-                    var news = new News
-                    {
-                        Titulo = newsDto.Titulo,
-                        Autor = newsDto.Autor,
-                        FechaDePublicacion = newsDto.FechaDePublicacion,
-                        Cuerpo = newsDto.Cuerpo
+                    Titulo = newsDto.Titulo,
+                    Autor = newsDto.Autor,
+                    FechaDePublicacion = newsDto.FechaDePublicacion,
+                    Cuerpo = newsDto.Cuerpo
 
-                    };
+                };
 
-                    var url = await this._DirectoryController.SaveImages(newsDto.Titulo!, images);
+                var url = await this._DirectoryController.SaveImages(newsDto.Titulo!, images);
 
-                    if (!string.IsNullOrWhiteSpace(url))
-                    {
-                        news.Url_images = url;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-
-                    var Confirm = await this._Db.News.AddAsync(news);
-                    var SaveResult = await _Db.SaveChangesAsync();
-                    if (SaveResult > 0)
-                    {
-                        return true;
-                    }
-
+                if (!string.IsNullOrWhiteSpace(url))
+                {
+                    news.Url_images = url;
+                }
+                else
+                {
                     return false;
                 }
 
-
-                return false;
+                var Confirm = await this._Db.News.AddAsync(news);
+                var SaveResult = await _Db.SaveChangesAsync();
+                if (SaveResult > 0)
+                {
+                    return true;
+                }
             }
-            catch (Exception ex)
-            {
-                this._Logger.LogError(ex, "Error al guardar una noticia");
-                return false;
-            }
-       
+            return false;
 
         }
 
@@ -220,33 +177,26 @@ namespace Blog_informetion_API.Models
         {
             var newscontent = new List<NewsDto>();
             var today = dateOnly;
-            try
+
+            var newsList = await this._Db.News.Where(f => f.FechaDePublicacion == today).ToListAsync();
+
+
+            foreach (var item in newsList)
             {
-                var newsList = await this._Db.News.Where(f => f.FechaDePublicacion == today).ToListAsync();
-
-
-                foreach (var item in newsList)
+                var News = new NewsDto()
                 {
-                    var News = new NewsDto()
-                    {
-                        Titulo = item.Titulo,
-                        Autor = item.Autor,
-                        FechaDePublicacion = item.FechaDePublicacion,
-                        Cuerpo = Regex.Replace(item.Cuerpo!, @"\.\s+", ".\n"),
-                        Url_images = $"https://localhost:7186/information/news_images={Uri.EscapeDataString(item.Titulo!)}"
-                    };
+                    Titulo = item.Titulo,
+                    Autor = item.Autor,
+                    FechaDePublicacion = item.FechaDePublicacion,
+                    Cuerpo = Regex.Replace(item.Cuerpo!, @"\.\s+", ".\n"),
+                    Url_images = $"https://localhost:7186/information/news_images={Uri.EscapeDataString(item.Titulo!)}"
+                };
 
-                    newscontent.Add(News);
+                newscontent.Add(News);
 
-                }
-
-                return newscontent;
             }
-            catch (Exception ex)
-            {
-                this._Logger.LogError(ex, "Error al obtener noticia");
-                return newscontent = null;
-            }
+
+            return newscontent;
         }
     }
 }

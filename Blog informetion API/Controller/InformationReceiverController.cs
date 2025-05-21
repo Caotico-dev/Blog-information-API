@@ -35,11 +35,11 @@ namespace Blog_informetion_API.Controller
         {
             try
             {
-                 var verify = await _userManager.FindByEmailAsync(model.Email!);
+                var verify = await _userManager.FindByEmailAsync(model.Email!);
                 if (verify != null)
                 {
                     return BadRequest(new { message = $"El correo: {model.Email} ya esta registrado" });
-                } 
+                }
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -55,12 +55,12 @@ namespace Blog_informetion_API.Controller
             catch (Exception ex)
             {
                 this._logger.LogError(ex, "Error al registrar al usuario");
-                return StatusCode(500,"Error interno del servidor.");
-                
+                return StatusCode(500, "Error interno del servidor.");
+
             }
-          
+
         }
-        
+
         [HttpPost("/information/publicists")]
         public async Task<IActionResult> SignPublicist([FromBody] LoginModel model)
         {
@@ -82,7 +82,7 @@ namespace Blog_informetion_API.Controller
                 this._logger.LogError(ex, "Error al iniciar sesion.");
                 return StatusCode(500, "Error interno del servidor.");
             }
-            
+
         }
         private async Task<string> GenerateJwtToken(ApplicationUser user)
         {
@@ -118,7 +118,7 @@ namespace Blog_informetion_API.Controller
                 this._logger.LogError(ex, "Error al general token");
                 throw;
             }
-            
+
         }
 
         [Authorize]
@@ -134,10 +134,10 @@ namespace Blog_informetion_API.Controller
             catch (Exception ex)
             {
                 this._logger.LogError(ex, "Error al obtener la noticia");
-                return new List<NewsDto>();              
+                return new List<NewsDto>();
 
             }
-            
+
 
         }
         [Authorize]
@@ -196,7 +196,7 @@ namespace Blog_informetion_API.Controller
                     if (succes)
                     {
                         var news = await this._Information_SQL.GetNewsAsync();
-                        return Created("/information/news",news);
+                        return Created("/information/news", news);
                     }
                     else
                     {
@@ -235,11 +235,11 @@ namespace Blog_informetion_API.Controller
                 return StatusCode(500, "Error interno del servidor");
             }
         }
-    }   
-    
+    }
+
 }
 
 
 
-    
+
 
