@@ -116,7 +116,6 @@ namespace Blog_informetion_API.DirectoryController
         /// <returns>A file extension.</returns>
         public async Task<string> GetExtension(string path)
         {
-
             if (Directory.Exists(path))
             {
                 var files = await Task.Run(() => Directory.GetFiles(path));
@@ -125,17 +124,12 @@ namespace Blog_informetion_API.DirectoryController
                                                 Path.GetExtension(f).Equals(".png", StringComparison.OrdinalIgnoreCase));
 
                 var imgext = Path.GetExtension(img);
-
-
                 if (imgext != null)
                 {
                     return imgext.TrimStart('.');
                 }
-                return "";
-
             }
             return "";
-
         }
 
         /// <summary>
@@ -145,9 +139,7 @@ namespace Blog_informetion_API.DirectoryController
         /// <returns>string</returns>
         public async Task<string> SaveImages(string titulo, IFormFile imagen)
         {
-
             CreateDirectory();
-
             if (!string.IsNullOrWhiteSpace(titulo) && imagen.Length != 0)
             {
                 var numberDirectory = NumberDirectoy(path);
@@ -165,8 +157,6 @@ namespace Blog_informetion_API.DirectoryController
                 {
                     return file;
                 }
-                return "";
-
             }
             return "";
 

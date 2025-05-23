@@ -119,7 +119,7 @@
     ]
   },
   {
-    "ContainingType": "Blog_informetion_API.Controller.InformationReceiverController",
+    "ContainingType": "Blog_informetion_API.Controllers.SessionController",
     "Method": "RegisterPublicist",
     "RelativePath": "information/publicist",
     "HttpMethod": "POST",
@@ -135,7 +135,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Blog_informetion_API.Controller.InformationReceiverController",
+    "ContainingType": "Blog_informetion_API.Controllers.SessionController",
     "Method": "SignPublicist",
     "RelativePath": "information/publicists",
     "HttpMethod": "POST",

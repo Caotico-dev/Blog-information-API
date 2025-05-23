@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Serilog;
+using Blog_informetion_API.DataServices;
 
 
 Log.Logger = new LoggerConfiguration()
@@ -21,8 +22,6 @@ Log.Information("Starting web application");
 
 try
 {
-
-
     var builder = WebApplication.CreateBuilder(args);
 
     builder.Services.AddControllers();
@@ -37,7 +36,7 @@ try
     {
         options.User.RequireUniqueEmail = true;
 
-    }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+    }).AddEntityFrameworkStores<ApplicationDbContext>();
 
     builder.Services.AddAuthentication(options =>
     {

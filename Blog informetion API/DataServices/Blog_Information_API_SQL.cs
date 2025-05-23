@@ -1,8 +1,9 @@
 ﻿using Blog_informetion_API.DirectoryController;
+using Blog_informetion_API.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 
-namespace Blog_informetion_API.Models
+namespace Blog_informetion_API.DataServices
 {
     public interface IBlog_information_SQL
     {
@@ -42,8 +43,8 @@ namespace Blog_informetion_API.Models
 
         public Blog_Information_API_SQL(BlogInformationApiContext db, IDirectoryController directoryController)
         {
-            this._Db = db;
-            this._DirectoryController = directoryController;
+            _Db = db;
+            _DirectoryController = directoryController;
         }
         /// <summary>
         /// Delete a news item 
@@ -53,14 +54,14 @@ namespace Blog_informetion_API.Models
         public async Task<bool> DeleteNewsAsync(string titulo, DateOnly dateOnly)
         {
 
-            var News = await this._Db.News.FirstOrDefaultAsync(f => f.Titulo!.ToLower().Trim() == titulo.ToLower().Trim() && f.FechaDePublicacion == dateOnly);
+            var News = await _Db.News.FirstOrDefaultAsync(f => f.Titulo!.ToLower().Trim() == titulo.ToLower().Trim() && f.FechaDePublicacion == dateOnly);
 
             if (News != null)
             {
-                bool deletedirectory = await this._DirectoryController.DeleteImages(News.Url_images!);
+                bool deletedirectory = await _DirectoryController.DeleteImages(News.Url_images!);
                 if (deletedirectory)
                 {
-                    this._Db.News.Remove(News);
+                    _Db.News.Remove(News);
 
                     await _Db.SaveChangesAsync();
                     return true;
@@ -80,7 +81,7 @@ namespace Blog_informetion_API.Models
             var newscontent = new List<NewsDto>();
             var today = DateOnly.FromDateTime(DateTime.Today);
 
-            var newsList = await this._Db.News.Where(f => f.FechaDePublicacion == today).ToListAsync();
+            var newsList = await _Db.News.Where(f => f.FechaDePublicacion == today).ToListAsync();
 
 
             foreach (var item in newsList)
@@ -112,13 +113,13 @@ namespace Blog_informetion_API.Models
             if (!string.IsNullOrEmpty(titulo))
             {
 
-                var images = this._Db.News.FirstOrDefault(t => t.Titulo!.ToLower().Trim() == titulo.ToLower().Trim())?.Url_images;
+                var images = _Db.News.FirstOrDefault(t => t.Titulo!.ToLower().Trim() == titulo.ToLower().Trim())?.Url_images;
 
                 if (!string.IsNullOrEmpty(images))
                 {
 
-                    var imageData = await this._DirectoryController.GetFileImages(images);
-                    var ext = await this._DirectoryController.GetExtension(images);
+                    var imageData = await _DirectoryController.GetFileImages(images);
+                    var ext = await _DirectoryController.GetExtension(images);
 
                     if (imageData != null && !string.IsNullOrEmpty(ext))
                     {
@@ -151,7 +152,7 @@ namespace Blog_informetion_API.Models
 
                 };
 
-                var url = await this._DirectoryController.SaveImages(newsDto.Titulo!, images);
+                var url = await _DirectoryController.SaveImages(newsDto.Titulo!, images);
 
                 if (!string.IsNullOrWhiteSpace(url))
                 {
@@ -162,7 +163,7 @@ namespace Blog_informetion_API.Models
                     return false;
                 }
 
-                var Confirm = await this._Db.News.AddAsync(news);
+                var Confirm = await _Db.News.AddAsync(news);
                 var SaveResult = await _Db.SaveChangesAsync();
                 if (SaveResult > 0)
                 {
@@ -178,7 +179,7 @@ namespace Blog_informetion_API.Models
             var newscontent = new List<NewsDto>();
             var today = dateOnly;
 
-            var newsList = await this._Db.News.Where(f => f.FechaDePublicacion == today).ToListAsync();
+            var newsList = await _Db.News.Where(f => f.FechaDePublicacion == today).ToListAsync();
 
 
             foreach (var item in newsList)
